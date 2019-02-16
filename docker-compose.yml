@@ -1,0 +1,16 @@
+flaskapp:
+  build: flask_uwsgi
+  volumes:
+    - ./site:/home/web/site
+  expose:
+    - "3031"
+  command: uwsgi --emperor /home/web/site
+
+nginx:
+  image: nginx:latest
+  links:
+    - flaskapp:uwsgi
+  ports:
+    - "3031:80"
+  volumes:
+    - ./nginx/nginx.conf:/etc/nginx/nginx.conf
